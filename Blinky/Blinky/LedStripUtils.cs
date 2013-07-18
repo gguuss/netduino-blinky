@@ -124,7 +124,14 @@ namespace Blinky
             return colors;
         }
 
-        public byte[][] RotateMask(byte[][] mask)
+        /// <summary>
+        /// Rotates a byte mask to rotate edge pixels to the opposite 
+        /// set of the strip
+        /// </summary>
+        /// <param name="mask">The original mask to rotate.</param>
+        /// <param name="wrap">Set to false to disable wrapping the display.</param>
+        /// <returns>The original mask wrapped by one pixel.</returns>
+        public byte[][] RotateMask(byte[][] mask, bool wrap)
         {
             byte[][] newMask = new byte[_numStrips][];
 
@@ -133,13 +140,387 @@ namespace Blinky
             for (int strip = 0; strip < _numStrips; strip++)
             {
                 newMask[strip] = new byte[_numLEDs];
-                newMask[strip][0] = mask[strip][mask.Length - 1];
-                for (int led = 0; led < (_numLEDs -1); led++)
+                if (wrap)
+                {
+                    newMask[strip][0] = mask[strip][_numLEDs - 1];
+                }
+                for (int led = 0; led < (_numLEDs-1); led++)
                 {
                     newMask[strip][led+1] = mask[strip][led];
                 }
             }
             return newMask;
+        }
+
+        /// <summary>
+        /// Get a mask representing a letter to the display.
+        /// </summary>
+        /// <param name="letter"></param>
+        /// <returns></returns>
+        public byte[][] CharAsMask(char letter)
+        {
+            // Letters are currently fixed to 5x5
+            //byte size = 5;
+            byte[][] toReturn;
+
+            // TODO: assume a 
+            switch (letter.ToLower())
+            {
+                case 'a':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 'b':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 'c':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {0,1,1,1,1}
+                    };
+                    break;
+                case 'd':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,0}
+                    };
+                    break;
+                case 'e':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 'f':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,1,0,0},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,0,0,0,0}
+                    };
+                    break;
+                case 'g':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,0,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,1,1,1}
+                    };
+                    break;
+                case 'h':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 'i':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 'j':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,1,0},
+                        new byte[] {0,0,0,1,0},
+                        new byte[] {1,0,0,1,0},
+                        new byte[] {0,1,1,1,0}
+                    };
+                    break;
+                case 'k':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,1,0},
+                        new byte[] {1,0,1,0,0},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,0,1,0,0},
+                        new byte[] {1,0,0,1,0}
+                    };
+                    break;
+                case 'l':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 'm':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,0,1,1},
+                        new byte[] {1,0,1,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 'n':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,0,0,1},
+                        new byte[] {1,0,1,0,1},
+                        new byte[] {1,0,0,1,1},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 'o':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,1,1,0}
+                    };
+                    break;
+                case 'p':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,0,0,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,0,0,0}
+                    };
+                    break;
+                case 'q':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,1,0,1},
+                        new byte[] {1,0,0,1,1},
+                        new byte[] {0,1,1,1,1}
+                    };
+                    break;
+                case 'r':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,0},
+                        new byte[] {1,0,0,1,0},
+                        new byte[] {1,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 's':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 't':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0}
+                    };
+                    break;
+                case 'u':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case 'v':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,0,1,0},
+                        new byte[] {0,1,0,1,0},
+                        new byte[] {0,0,1,0,0}
+                    };
+                    break;
+                case 'w':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,1,0,1},
+                        new byte[] {1,1,0,1,1},
+                        new byte[] {1,1,0,1,1}
+                    };
+                    break;
+                case 'x':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,0,1,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,1,0,1,0},
+                        new byte[] {1,0,0,0,1}
+                    };
+                    break;
+                case 'y':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,0,1,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {0,0,1,0,0}
+                    };
+                    break;
+                case 'z':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,1,1},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '0':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {0,1,1,1,0}
+                    };
+                    break;
+                case '1':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,1,1,1,0},
+                        new byte[] {0,1,1,1,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '2':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,1,1},
+                        new byte[] {0,0,1,0,0},
+                        new byte[] {1,1,0,0,0},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '3':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,0,1},
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {0,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '4':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,0,0,1},
+                        new byte[] {1,1,0,0,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,1,1},
+                        new byte[] {0,0,0,1,1}
+                    };
+                    break;
+                case '5':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '6':
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,1,1,1,1},
+                        new byte[] {1,0,0,0,0},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '7':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,1,1},
+                        new byte[] {0,0,1,1,0},
+                        new byte[] {0,1,1,0,0},
+                        new byte[] {1,1,0,0,0}
+                    };
+                    break;
+                case '8':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,0,1},
+                        new byte[] {1,1,1,1,1}
+                    };
+                    break;
+                case '9':
+                    toReturn = new byte[][]{ 
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {1,0,0,1,1},
+                        new byte[] {1,1,1,1,1},
+                        new byte[] {0,0,0,1,1},
+                        new byte[] {0,0,0,1,1}
+                    };
+                    break;
+                default:
+                    toReturn = new byte[][]{ 
+                        new byte[] {0,0,0,0,0},
+                        new byte[] {0,0,0,0,0},
+                        new byte[] {0,0,0,0,0},
+                        new byte[] {0,0,0,0,0},
+                        new byte[] {0,0,0,0,0}
+                    };
+                    break;
+            }
+            return toReturn;
+        }
+
+        /// <summary>
+        /// Writes a single letter to an arbitrary position in a mask.
+        /// </summary>
+        /// <param name="letter">The letter to write [a-z0-9]</param>
+        /// <param name="position">The position to write the letter to.</param>
+        /// <param name="mask">The mask to use for rendering the letter.</param>
+        public void WriteLetter(char letter, int position, byte[][] mask)
+        {
+            byte[][] toWrite = CharAsMask(letter);
+            // Letters are currently fixed to 5x5
+            byte size = 5;
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++) {
+                    mask[i][j + (size*position) + position] = toWrite[i][j];
+                }
+            }
         }
 
         /// <summary>

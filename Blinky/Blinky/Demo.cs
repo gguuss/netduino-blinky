@@ -40,24 +40,33 @@ namespace Blinky
                 switch (mode)
                 {
                     case 0:
-                        AdvancedMaskTest();
+                        RainbowStringTest(false);
                         break;
                     case 1:
-                        MaskTest();
+                        StringTest(false);
                         break;
                     case 2:
-                        RGBTest();
+                        LettersTest();
                         break;
                     case 3:
-                        rainbowCycle(10000);
+                        AdvancedMaskTest();
                         break;
                     case 4:
-                        cylonCycle(1000, 20);
+                        MaskTest();
                         break;
                     case 5:
-                        EqualizerTest();
+                        RGBTest();
                         break;
                     case 6:
+                        rainbowCycle(10000);
+                        break;
+                    case 7:
+                        cylonCycle(1000, 20);
+                        break;
+                    case 8:
+                        EqualizerTest();
+                        break;
+                    case 9:
                         rainbowCylon(100);
                         break;
                     default:
@@ -131,12 +140,206 @@ namespace Blinky
         }
 
         /// <summary>
+        /// Test simply writing letters to the display. This makes use of 
+        /// both masks and the letters utility functions.
+        /// </summary>
+        public void StringTest(bool isVertical)
+        {
+            // An empty mask
+            byte[][] mask = new byte[][]{ 
+                // A simple guide, assuming 32 LEDs in a strip
+                // ------------------------------------------------------------------------------------------------------------
+                // --------  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 ---
+                // ------------------------------------------------------------------------------------------------------------
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+            byte[] strips = new byte[numLEDs * numStrips * 3];
+
+
+            string toWrite = "abcdefghijklmnopqrstuvwxyz1234567890 ";
+
+            int stringIndex = toWrite.Length - 1;
+
+            while (!changeMode)
+            {
+                byte[][] nextChar = utils.CharAsMask(toWrite[stringIndex]);
+                for (int row = 0; row < 5; row++)
+                {
+                    for (int col = 0; col < 5; col++)
+                    {
+                        if (isVertical)
+                        {
+                            mask[col][0] = nextChar[row][col];
+                        }
+                        else
+                        {
+                            mask[col][0] = nextChar[col][4 - row];
+                        }
+                    }
+                    spi.Write(utils.PixelsFromMask(mask, strips));
+                    mask = utils.RotateMask(mask, false);
+                    Thread.Sleep(10);
+                }
+                // Draw line between letters
+                mask = utils.RotateMask(mask, false);
+
+                stringIndex--;
+                if (stringIndex < 0)
+                {
+                    stringIndex = toWrite.Length - 1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a byte array representing a rainbow rotated by the passed in value.
+        /// </summary>
+        /// <param name="offset">The value to rotate. Should be less than #leds.</param>
+        /// <returns>A byte with pixels set in the rotated rainbow.</returns>
+        public byte[] GetRainbow(int offset)
+        {
+            byte[] toReturn = new byte[numLEDs * numStrips * 3];
+
+            // A nice set of red pixels.
+            for (int strip = 0; strip < numStrips; strip++)
+            {
+                for (int i = 0; i < numLEDs; i++)
+                {
+                    int pos = ((i + offset) >= numLEDs) ? offset - numLEDs : offset;
+                    utils.SetColor((i + (numLEDs * strip) + pos), utils.Wheel((255 / numLEDs) * i), toReturn);
+                }
+            }
+
+            return toReturn;
+        }
+
+        /// <summary>
+        /// Test simply writing letters to the display. This makes use of 
+        /// both masks and the letters utility functions.
+        /// </summary>
+        public void RainbowStringTest(bool isVertical)
+        {
+
+            // An empty mask
+            byte[][] mask = new byte[][]{ 
+                // A simple guide, assuming 32 LEDs in a strip
+                // ------------------------------------------------------------------------------------------------------------
+                // --------  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 ---
+                // ------------------------------------------------------------------------------------------------------------
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+            string toWrite = "gus pwnz LED awesome lulz ";
+            int stringIndex = toWrite.Length - 1;
+            int offset = 0;
+
+            while (!changeMode)
+            {
+                byte[][] nextChar = utils.CharAsMask(toWrite[stringIndex]);
+                for (int row = 0; row < 5; row++)
+                {
+                    for (int col = 0; col < 5; col++)
+                    {
+                        if (isVertical)
+                        {
+                            mask[col][0] = nextChar[row][col];
+                        }
+                        else
+                        {
+                            mask[col][0] = nextChar[col][4-row];
+                        }
+                    }
+                    byte[] strips = GetRainbow(offset);
+                    spi.Write(utils.PixelsFromMask(mask, strips));
+                    mask = utils.RotateMask(mask, false);
+                    Thread.Sleep(10);
+                    offset++;
+                    if (offset > numLEDs)
+                    {
+                        offset = 0;
+                    }
+                }
+                // Draw line between letters
+                mask = utils.RotateMask(mask, false);
+
+                stringIndex--;
+                if (stringIndex < 0)
+                {
+                    stringIndex = toWrite.Length - 1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Test simply writing letters to the display. This makes use of 
+        /// both masks and the letters utility functions.
+        /// </summary>
+        public void LettersTest()
+        {
+            // An empty mask
+            byte[][] mask = new byte[][]{ 
+                // A simple guide, assuming 32 LEDs in a strip
+                // ------------------------------------------------------------------------------------------------------------
+                // --------  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 ---
+                // ------------------------------------------------------------------------------------------------------------
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+            byte[] strips = new byte[numLEDs * numStrips * 3];
+
+            // A nice set of red pixels.
+            for (int strip = 0; strip < numStrips; strip++)
+            {
+                for (int i = 0; i < numLEDs; i++)
+                {
+                    utils.SetColor(i + (numLEDs * strip), utils.RGB(255, 0, 0), strips);
+                }
+            }
+
+            utils.WriteLetter('z', 0, mask);
+            utils.WriteLetter('z', 1, mask);
+            utils.WriteLetter('y', 2, mask);
+            utils.WriteLetter('z', 3, mask);
+            utils.WriteLetter('x', 4, mask);
+
+            while (!changeMode)
+            {
+                spi.Write(utils.PixelsFromMask(mask, strips));
+                mask = utils.RotateMask(mask, true);
+                Thread.Sleep(100);
+            }
+        }
+
+        /// <summary>
         /// Tests rendering a "mask" which is a template that contains
         /// booleans indicating the pixel should be drawn.
         /// </summary>
         public void AdvancedMaskTest()
         {
             byte[] strips = new byte[numLEDs * numStrips * 3];
+
+
+            // Some X's
+            byte[][] mask = new byte[][]{ 
+                // A simple guide, assuming 32 LEDs in a strip
+                // ------------------------------------------------------------------------------------------------------------
+                // --------  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 ---
+                // ------------------------------------------------------------------------------------------------------------
+                new byte[] { 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                new byte[] { 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
+                new byte[] { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0},
+                new byte[] { 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
+                new byte[] { 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
             /*
             // GUS PWNS
@@ -225,7 +428,7 @@ namespace Blinky
             while (!changeMode)
             {
                 spi.Write(utils.PixelsFromMask(mask,strips));
-                mask = utils.RotateMask(mask);
+                mask = utils.RotateMask(mask, true);
                 Thread.Sleep(100);
             }
         }
