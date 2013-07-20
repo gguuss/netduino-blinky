@@ -17,7 +17,7 @@ namespace Blinky
     class Demo
     {
         byte numLEDs = 32;
-        byte numStrips = 5;
+        byte numStrips = 1;
         int mode = 0;
         int numModes = 7;
         bool changeMode = false;
@@ -39,7 +39,7 @@ namespace Blinky
             {
                 switch (mode)
                 {
-                    case 0:
+                    case 6:
                         RainbowStringTest(false);
                         break;
                     case 1:
@@ -57,7 +57,7 @@ namespace Blinky
                     case 5:
                         RGBTest();
                         break;
-                    case 6:
+                    case 0:
                         rainbowCycle(10000);
                         break;
                     case 7:
