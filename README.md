@@ -18,4 +18,7 @@ To run the program:
 When running the demo, you can press the button on the device to 
 switch the mode between the various demos included.
 
+A few demos of the patterns:
 
+* https://plus.google.com/+GusClass/posts/TzfUe9kzsTx
+* https://plus.google.com/+GusClass/posts/FiphDznHLBe
