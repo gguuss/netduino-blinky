@@ -22,3 +22,7 @@ A few demos of the patterns:
 
 * https://plus.google.com/+GusClass/posts/TzfUe9kzsTx
 * https://plus.google.com/+GusClass/posts/FiphDznHLBe
+
+Most of the LED strips I have seen use 5V, while the typical input for a 
+Netduino will be 12V. Make sure to supply the correct voltage or you will
+most likely break your LED strip.
