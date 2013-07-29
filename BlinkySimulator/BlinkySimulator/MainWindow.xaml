@@ -1,0 +1,10 @@
+﻿<Window x:Class="BlinkySimulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="600" Width="1100"
+        KeyDown="updateMode"
+        >
+    <Grid>
+        <Canvas Height="500" HorizontalAlignment="Left" Margin="50,50,0,0" Name="virtualScreen" VerticalAlignment="Top" Width="1000" />
+    </Grid>
+</Window>
