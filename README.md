@@ -27,6 +27,8 @@ Most of the LED strips I have seen use 5V, while the typical input for a
 Netduino will be 12V. Make sure to supply the correct voltage or you will
 most likely break your LED strip.
 
+## Simulator ##
+
 The project now includes a simulator written in WPF. To load the simulator,
 open the solution file in the BlinkySimulator folder.
 
