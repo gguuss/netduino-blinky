@@ -32,6 +32,11 @@ most likely break your LED strip.
 The project now includes a simulator written in WPF. To load the simulator,
 open the solution file in the BlinkySimulator folder.
 
+Some small differences between the simulator and the netduino library:
+
+* In the simulator, the pixels are not reversed every other line, this affects LedStripUtils
+* The simulator requires yield statements for the LED loops because of the way WPF works
+
 License
 =======
 
