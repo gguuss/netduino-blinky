@@ -9,7 +9,7 @@ Netduino code.
 I'm assuming that you are connecting LED strips such as the Adafruit one:
 http://learn.adafruit.com/digital-led-strip
 
-To run the program:
+To run the program on a netduino:
 
 1. Connect the CLK pin to 13
 2. Connect the MOSI pin to 11
@@ -26,6 +26,9 @@ A few demos of the patterns:
 Most of the LED strips I have seen use 5V, while the typical input for a 
 Netduino will be 12V. Make sure to supply the correct voltage or you will
 most likely break your LED strip.
+
+The project now includes a simulator written in WPF. To load the simulator,
+open the solution file in the BlinkySimulator folder.
 
 License
 =======
