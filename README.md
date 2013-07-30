@@ -13,7 +13,9 @@ To run the program on a netduino:
 
 1. Connect the CLK pin to 13
 2. Connect the MOSI pin to 11
-3. Deploy the program to your Netduino
+3. Connect power to the +5V pin
+4. Connect ground to the GND pin
+5. Deploy the program to your Netduino
 
 When running the demo, you can press the button on the device to 
 switch the mode between the various demos included.
