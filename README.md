@@ -42,4 +42,4 @@ Some small differences between the simulator and the netduino library:
 License
 =======
 
-Aspects of this work are derived from the [Adafruit NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel) and thus it falls under the [GNU license](http://www.gnu.org/copyleft/gpl.html).
+Aspects of this work that are derived from the [Adafruit NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel) fall under the [GNU license](http://www.gnu.org/copyleft/gpl.html). When noted, software uses the MIT license.
