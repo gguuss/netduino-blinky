@@ -22,8 +22,8 @@ switch the mode between the various demos included.
 
 A few demos of the patterns:
 
-* https://plus.google.com/+GusClass/posts/TzfUe9kzsTx
-* https://plus.google.com/+GusClass/posts/FiphDznHLBe
+* https://youtu.be/eGrJc1vUBZg
+* https://youtu.be/aK6V58M8khM
 
 Most of the LED strips I have seen use 5V, while the typical input for a 
 Netduino will be 12V. Make sure to supply the correct voltage or you will
